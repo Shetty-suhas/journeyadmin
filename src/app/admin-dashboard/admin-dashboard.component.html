@@ -1,0 +1,385 @@
+<div class="container">
+  <h1 class="title">Admin Dashboard</h1>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <button *ngFor="let tab of tabs" (click)="selectTab(tab)" class="tab-button"
+      [ngClass]="{'active-tab': activeTab === tab}">
+      {{ tab }}
+    </button>
+  </div>
+
+  <!-- Tab Content -->
+  <div class="tab-content">
+    <!-- Flights Tab -->
+    <div *ngIf="activeTab === 'Flights'" class="tab-pane">
+      <h2 class="tab-title">Add New Flight</h2>
+      <form [formGroup]="flightForm" (ngSubmit)="addFlight()" class="form">
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="label">Flight Number</label>
+            <input type="text" formControlName="flightNumber" class="input"
+              [ngClass]="{'input-error': flightForm.get('flightNumber')?.invalid && flightForm.get('flightNumber')?.touched}">
+            <p *ngIf="flightForm.get('flightNumber')?.invalid && flightForm.get('flightNumber')?.touched" class="error">
+              Flight Number is required</p>
+          </div>
+          <div class="form-group">
+            <label class="label">Airline</label>
+            <input type="text" formControlName="airline" class="input"
+              [ngClass]="{'input-error': flightForm.get('airline')?.invalid && flightForm.get('airline')?.touched}">
+            <p *ngIf="flightForm.get('airline')?.invalid && flightForm.get('airline')?.touched" class="error">Airline is
+              required</p>
+          </div>
+          <div class="form-group">
+            <label class="label">From City</label>
+            <select formControlName="from" class="input" (change)="updateToCities()"
+              [ngClass]="{'input-error': flightForm.get('from')?.invalid && flightForm.get('from')?.touched}">
+              <option value="">Select City</option>
+              <option *ngFor="let city of fromCities" [value]="city">{{ city }}</option>
+            </select>
+            <p *ngIf="flightForm.get('from')?.invalid && flightForm.get('from')?.touched" class="error">From City is
+              required</p>
+          </div>
+          <div class="form-group">
+            <label class="label">To City</label>
+            <select formControlName="to" class="input"
+              [ngClass]="{'input-error': flightForm.get('to')?.invalid && flightForm.get('to')?.touched}">
+              <option value="">Select City</option>
+              <option *ngFor="let city of toCities" [value]="city">{{ city }}</option>
+            </select>
+            <p *ngIf="flightForm.get('to')?.invalid && flightForm.get('to')?.touched" class="error">To City is required
+            </p>
+          </div>
+          <div class="form-group">
+            <label class="label">Departure Time</label>
+            <input type="text" formControlName="departureTime" placeholder="e.g., 10:00 AM" class="input"
+              [ngClass]="{'input-error': flightForm.get('departureTime')?.invalid && flightForm.get('departureTime')?.touched}">
+            <p *ngIf="flightForm.get('departureTime')?.invalid && flightForm.get('departureTime')?.touched"
+              class="error">Departure Time is required</p>
+          </div>
+          <div class="form-group">
+            <label class="label">Departure City</label>
+            <input type="text" formControlName="departureCity" class="input">
+          </div>
+          <div class="form-group">
+            <label class="label">Departure Airport</label>
+            <input type="text" formControlName="departureAirport" class="input"
+              [ngClass]="{'input-error': flightForm.get('departureAirport')?.invalid && flightForm.get('departureAirport')?.touched}">
+            <p *ngIf="flightForm.get('departureAirport')?.invalid && flightForm.get('departureAirport')?.touched"
+              class="error">Departure Airport is required</p>
+          </div>
+          <div class="form-group">
+            <label class="label">Departure Date</label>
+            <input type="date" formControlName="departureDate" class="input"
+              [ngClass]="{'input-error': flightForm.get('departureDate')?.invalid && flightForm.get('departureDate')?.touched}">
+            <p *ngIf="flightForm.get('departureDate')?.invalid && flightForm.get('departureDate')?.touched"
+              class="error">Departure Date is required</p>
+          </div>
+          <div class="form-group">
+            <label class="label">Arrival Time</label>
+            <input type="text" formControlName="arrivalTime" placeholder="e.g., 12:00 PM" class="input"
+              [ngClass]="{'input-error': flightForm.get('arrivalTime')?.invalid && flightForm.get('arrivalTime')?.touched}">
+            <p *ngIf="flightForm.get('arrivalTime')?.invalid && flightForm.get('arrivalTime')?.touched" class="error">
+              Arrival Time is required</p>
+          </div>
+          <div class="form-group">
+            <label class="label">Arrival City</label>
+            <input type="text" formControlName="arrivalCity" class="input">
+          </div>
+          <div class="form-group">
+            <label class="label">Arrival Airport</label>
+            <input type="text" formControlName="arrivalAirport" class="input"
+              [ngClass]="{'input-error': flightForm.get('arrivalAirport')?.invalid && flightForm.get('arrivalAirport')?.touched}">
+            <p *ngIf="flightForm.get('arrivalAirport')?.invalid && flightForm.get('arrivalAirport')?.touched"
+              class="error">Arrival Airport is required</p>
+          </div>
+          <div class="form-group">
+            <label class="label">Arrival Date</label>
+            <input type="date" formControlName="arrivalDate" class="input"
+              [ngClass]="{'input-error': flightForm.get('arrivalDate')?.invalid && flightForm.get('arrivalDate')?.touched}">
+            <p *ngIf="flightForm.get('arrivalDate')?.invalid && flightForm.get('arrivalDate')?.touched" class="error">
+              Arrival Date is required</p>
+          </div>
+          <div class="form-group">
+            <label class="label">Duration</label>
+            <input type="text" formControlName="duration" placeholder="e.g., 2h" class="input"
+              [ngClass]="{'input-error': flightForm.get('duration')?.invalid && flightForm.get('duration')?.touched}">
+            <p *ngIf="flightForm.get('duration')?.invalid && flightForm.get('duration')?.touched" class="error">Duration
+              is required</p>
+          </div>
+          <div class="form-group">
+            <label class="label">Stops</label>
+            <input type="text" formControlName="stops" placeholder="e.g., Non-stop" class="input"
+              [ngClass]="{'input-error': flightForm.get('stops')?.invalid && flightForm.get('stops')?.touched}">
+            <p *ngIf="flightForm.get('stops')?.invalid && flightForm.get('stops')?.touched" class="error">Stops is
+              required</p>
+          </div>
+          <div class="form-group">
+            <label class="label">Price (INR)</label>
+            <input type="number" formControlName="price" class="input"
+              [ngClass]="{'input-error': flightForm.get('price')?.invalid && flightForm.get('price')?.touched}">
+            <p *ngIf="flightForm.get('price')?.invalid && flightForm.get('price')?.touched" class="error">Price is
+              required and must be a number</p>
+          </div>
+          <div class="form-group">
+            <label class="label">Seats Available</label>
+            <input type="number" formControlName="seatsAvailable" class="input"
+              [ngClass]="{'input-error': flightForm.get('seatsAvailable')?.invalid && flightForm.get('seatsAvailable')?.touched}">
+            <p *ngIf="flightForm.get('seatsAvailable')?.invalid && flightForm.get('seatsAvailable')?.touched"
+              class="error">Seats Available must be 180</p>
+          </div>
+          <div class="form-group full-width">
+            <label class="label">Features</label>
+            <input type="text" formControlName="features" placeholder="e.g., Meal included" class="input"
+              [ngClass]="{'input-error': flightForm.get('features')?.invalid && flightForm.get('features')?.touched}">
+            <p *ngIf="flightForm.get('features')?.invalid && flightForm.get('features')?.touched" class="error">Features
+              is required</p>
+          </div>
+        </div>
+        <button type="submit" class="submit-button" [ngClass]="{'disabled-button': flightForm.invalid}"
+          [disabled]="flightForm.invalid">Add Flight</button>
+        <p *ngIf="flightMessage" class="message" [ngClass]="{'success': !flightError, 'error': flightError}">
+          {{ flightMessage }}
+        </p>
+      </form>
+    </div>
+
+    <!-- Buses Tab -->
+    <div *ngIf="activeTab === 'Buses'" class="tab-pane">
+      <h2 class="tab-title">Add New Bus</h2>
+      <form [formGroup]="busForm" (ngSubmit)="addBus()" class="form">
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="label">Company</label>
+            <input type="text" formControlName="company" class="input"
+              [ngClass]="{'input-error': busForm.get('company')?.invalid && busForm.get('company')?.touched}">
+            <p *ngIf="busForm.get('company')?.invalid && busForm.get('company')?.touched" class="error">Company is
+              required</p>
+          </div>
+          <div class="form-group">
+            <label class="label">Type</label>
+            <input type="text" formControlName="type" placeholder="e.g., AC Sleeper" class="input"
+              [ngClass]="{'input-error': busForm.get('type')?.invalid && busForm.get('type')?.touched}">
+            <p *ngIf="busForm.get('type')?.invalid && busForm.get('type')?.touched" class="error">Type is required</p>
+          </div>
+          <div class="form-group">
+            <label class="label">From City</label>
+            <select formControlName="from" class="input" (change)="updateBusToCities()"
+              [ngClass]="{'input-error': busForm.get('from')?.invalid && busForm.get('from')?.touched}">
+              <option value="">Select City</option>
+              <option *ngFor="let city of fromCities" [value]="city">{{ city }}</option>
+            </select>
+            <p *ngIf="busForm.get('from')?.invalid && busForm.get('from')?.touched" class="error">From City is required
+            </p>
+          </div>
+          <div class="form-group">
+            <label class="label">To City</label>
+            <select formControlName="to" class="input"
+              [ngClass]="{'input-error': busForm.get('to')?.invalid && busForm.get('to')?.touched}">
+              <option value="">Select City</option>
+              <option *ngFor="let city of busToCities" [value]="city">{{ city }}</option>
+            </select>
+            <p *ngIf="busForm.get('to')?.invalid && busForm.get('to')?.touched" class="error">To City is required</p>
+          </div>
+          <div class="form-group">
+            <label class="label">Departure Date</label>
+            <input type="date" formControlName="departureDate" class="input"
+              [ngClass]="{'input-error': busForm.get('departureDate')?.invalid && busForm.get('departureDate')?.touched}">
+            <p *ngIf="busForm.get('departureDate')?.invalid && busForm.get('departureDate')?.touched" class="error">
+              Departure Date is required</p>
+          </div>
+          <div class="form-group">
+            <label class="label">Departure Time</label>
+            <input type="text" formControlName="departureTime" placeholder="e.g., 08:00 PM" class="input"
+              [ngClass]="{'input-error': busForm.get('departureTime')?.invalid && busForm.get('departureTime')?.touched}">
+            <p *ngIf="busForm.get('departureTime')?.invalid && busForm.get('departureTime')?.touched" class="error">
+              Departure Time is required</p>
+          </div>
+          <div class="form-group">
+            <label class="label">Departure Location</label>
+            <input type="text" formControlName="departureLocation" class="input"
+              [ngClass]="{'input-error': busForm.get('departureLocation')?.invalid && busForm.get('departureLocation')?.touched}">
+            <p *ngIf="busForm.get('departureLocation')?.invalid && busForm.get('departureLocation')?.touched"
+              class="error">Departure Location is required</p>
+          </div>
+          <div class="form-group">
+            <label class="label">Arrival Time</label>
+            <input type="text" formControlName="arrivalTime" placeholder="e.g., 06:00 AM" class="input"
+              [ngClass]="{'input-error': busForm.get('arrivalTime')?.invalid && busForm.get('arrivalTime')?.touched}">
+            <p *ngIf="busForm.get('arrivalTime')?.invalid && busForm.get('arrivalTime')?.touched" class="error">Arrival
+              Time is required</p>
+          </div>
+          <div class="form-group">
+            <label class="label">Arrival Location</label>
+            <input type="text" formControlName="arrivalLocation" class="input"
+              [ngClass]="{'input-error': busForm.get('arrivalLocation')?.invalid && busForm.get('arrivalLocation')?.touched}">
+            <p *ngIf="busForm.get('arrivalLocation')?.invalid && busForm.get('arrivalLocation')?.touched" class="error">
+              Arrival Location is required</p>
+          </div>
+          <div class="form-group">
+            <label class="label">Duration</label>
+            <input type="text" formControlName="duration" placeholder="e.g., 10h" class="input"
+              [ngClass]="{'input-error': busForm.get('duration')?.invalid && busForm.get('duration')?.touched}">
+            <p *ngIf="busForm.get('duration')?.invalid && busForm.get('duration')?.touched" class="error">Duration is
+              required</p>
+          </div>
+          <div class="form-group">
+            <label class="label">Price (INR)</label>
+            <input type="number" formControlName="price" class="input"
+              [ngClass]="{'input-error': busForm.get('price')?.invalid && busForm.get('price')?.touched}">
+            <p *ngIf="busForm.get('price')?.invalid && busForm.get('price')?.touched" class="error">Price is required
+              and must be a number</p>
+          </div>
+          <div class="form-group">
+            <label class="label">Seats Available</label>
+            <input type="number" formControlName="seatsAvailable" class="input"
+              [ngClass]="{'input-error': busForm.get('seatsAvailable')?.invalid && busForm.get('seatsAvailable')?.touched}">
+            <p *ngIf="busForm.get('seatsAvailable')?.invalid && busForm.get('seatsAvailable')?.touched" class="error">
+            </p>
+            <p>Seats Available must be 39</p>
+          </div>
+          <div class="form-group full-width">
+            <label class="label">Features</label>
+            <input type="text" formControlName="features" placeholder="e.g., WiFi, Blanket" class="input"
+              [ngClass]="{'input-error': busForm.get('features')?.invalid && busForm.get('features')?.touched}">
+            <p *ngIf="busForm.get('features')?.invalid && busForm.get('features')?.touched" class="error">Features is
+              required</p>
+          </div>
+        </div>
+        <button type="submit" class="submit-button" [ngClass]="{'disabled-button': busForm.invalid}"
+          [disabled]="busForm.invalid">Add Bus</button>
+        <p *ngIf="busMessage" class="message" [ngClass]="{'success': !busError, 'error': busError}">
+          {{ busMessage }}
+        </p>
+      </form>
+    </div>
+    <!-- Hotels Tab -->
+    <div *ngIf="activeTab === 'Hotels'" class="tab-pane">
+      <h2 class="tab-title">Add New Hotel</h2>
+      <form [formGroup]="hotelForm" (ngSubmit)="addHotel()" class="form">
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="label">Hotel Name</label>
+            <input type="text" formControlName="name" class="input"
+              [ngClass]="{'input-error': hotelForm.get('name')?.invalid && hotelForm.get('name')?.touched}">
+            <p *ngIf="hotelForm.get('name')?.invalid && hotelForm.get('name')?.touched" class="error">
+              Hotel Name is required
+            </p>
+          </div>
+          <div class="form-group">
+            <label class="label">City</label>
+            <select formControlName="city" class="input"
+              [ngClass]="{'input-error': hotelForm.get('city')?.invalid && hotelForm.get('city')?.touched}">
+              <option value="">Select City</option>
+              <option *ngFor="let city of cities" [value]="city">{{ city }}</option>
+            </select>
+            <p *ngIf="hotelForm.get('city')?.invalid && hotelForm.get('city')?.touched" class="error">
+              City is required
+            </p>
+          </div>
+          <div class="form-group">
+            <label class="label">Rating</label>
+            <input type="number" formControlName="rating" step="0.1" min="0" max="5" class="input"
+              [ngClass]="{'input-error': hotelForm.get('rating')?.invalid && hotelForm.get('rating')?.touched}">
+            <p *ngIf="hotelForm.get('rating')?.invalid && hotelForm.get('rating')?.touched" class="error">
+              Rating is required and must be between 0 and 5
+            </p>
+          </div>
+          <div class="form-group">
+            <label class="label">Location</label>
+            <input type="text" formControlName="location" placeholder="e.g., Downtown, 2.5 miles from center"
+              class="input"
+              [ngClass]="{'input-error': hotelForm.get('location')?.invalid && hotelForm.get('location')?.touched}">
+            <p *ngIf="hotelForm.get('location')?.invalid && hotelForm.get('location')?.touched" class="error">
+              Location is required
+            </p>
+          </div>
+          <div class="form-group">
+            <label class="label">Original Price (INR)</label>
+            <input type="number" formControlName="originalPrice" min="0" class="input"
+              [ngClass]="{'input-error': hotelForm.get('originalPrice')?.invalid && hotelForm.get('originalPrice')?.touched}">
+            <p *ngIf="hotelForm.get('originalPrice')?.invalid && hotelForm.get('originalPrice')?.touched" class="error">
+              Original Price is required and must be a number
+            </p>
+          </div>
+          <div class="form-group">
+            <label class="label">Discounted Price (INR)</label>
+            <input type="number" formControlName="discountedPrice" min="0" class="input"
+              [ngClass]="{'input-error': hotelForm.get('discountedPrice')?.invalid && hotelForm.get('discountedPrice')?.touched}">
+            <p *ngIf="hotelForm.get('discountedPrice')?.invalid && hotelForm.get('discountedPrice')?.touched"
+              class="error">
+              Discounted Price is required and must be a number
+            </p>
+          </div>
+          <div class="form-group">
+            <label class="label">Hotel Image</label>
+            <input type="file" accept="image/*" (change)="onImageSelected($event)" class="input">
+            <p *ngIf="hotelForm.get('image')?.value && !imageValid" class="error">
+              Image size must be less than 5MB
+            </p>
+          </div>
+          <div class="form-group full-width">
+            <label class="label">Amenities (comma-separated)</label>
+            <input type="text" formControlName="amenities"
+              placeholder="e.g., Free WiFi, Breakfast Included, Swimming Pool" class="input"
+              [ngClass]="{'input-error': hotelForm.get('amenities')?.invalid && hotelForm.get('amenities')?.touched}">
+            <p *ngIf="hotelForm.get('amenities')?.invalid && hotelForm.get('amenities')?.touched" class="error">
+              At least one amenity is required
+            </p>
+          </div>
+        </div>
+        <button type="submit" class="submit-button" [ngClass]="{'disabled-button': hotelForm.invalid || !imageValid}"
+          [disabled]="hotelForm.invalid || !imageValid">Add Hotel</button>
+        <p *ngIf="hotelMessage" class="message" [ngClass]="{'success': !hotelError, 'error': hotelError}">
+          {{ hotelMessage }}
+        </p>
+      </form>
+    </div>
+
+    <!-- Bookings Tab -->
+    <div *ngIf="activeTab === 'Bookings'" class="tab-pane">
+      <h2 class="tab-title">View Bookings</h2>
+      <div *ngIf="bookings.length === 0" class="placeholder-text">
+        No bookings found.
+      </div>
+      <div *ngIf="bookings.length > 0" class="bookings-table">
+        <table>
+          <thead>
+            <tr>
+              <th>Booking ID</th>
+              <th>Total Cost (INR)</th>
+              <th>Payment Mode</th>
+              <th>Flight Number</th>
+              <th>Flight Seats</th>
+              <th>Bus Seats</th>
+              <th>Hotel Info</th>
+              <th>Guests</th>
+              <th>Local Transport</th>
+              <th>Created At</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let booking of bookings">
+              <td>{{ booking._id }}</td>
+              <td>{{ booking.totalCost | number:'1.2-2' }}</td>
+              <td>{{ booking.paymentMode }}</td>
+              <td>{{ booking.flightNumber || 'N/A' }}</td>
+              <td>{{ booking.flightSeats.length > 0 ? booking.flightSeats.join(', ') : 'None' }}</td>
+              <td>{{ booking.busSeats.length > 0 ? booking.busSeats.join(', ') : 'None' }}</td>
+              <td>{{ booking.hotelBookingInfo || 'N/A' }}</td>
+              <td>
+                <span *ngIf="booking.guestDetails.length > 0">
+                  {{ booking.guestDetails.length }} Guest{{ booking.guestDetails.length > 1 ? 's' : '' }}
+                </span>
+                <span *ngIf="booking.guestDetails.length === 0">None</span>
+              </td>
+              <td>{{ booking.localTransportMode || 'N/A' }}</td>
+              <td>{{ booking.createdAt | date:'medium' }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p *ngIf="bookingsError" class="error">{{ bookingsError }}</p>
+    </div>
+  </div>
+</div>
